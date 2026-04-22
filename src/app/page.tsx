@@ -1,8 +1,11 @@
+import SideBar from "@/components/SideBar";
+import Invoice from "@/views/Invoice";
 
 export default function Home() {
   return(
-    <div>
-      Home
-    </div>
+    <main className="flex">
+      <SideBar />
+      <Invoice />
+    </main>
   )
 }

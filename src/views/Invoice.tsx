@@ -1,0 +1,33 @@
+"use client"
+
+import InvoiceHeader from "@/components/InvoiceHeader"
+import { useInvoices } from "@/context/InvoiceContext"
+import Image from "next/image"
+import { useState } from "react"
+
+const Invoice = () => {
+  const { invoices } = useInvoices()
+  const [openForm, setOpenForm] = useState<boolean>(false)
+  return (
+    <section className="text-4xl w-[730px] mx-auto mt-10">
+      <InvoiceHeader setOpenForm={setOpenForm} />
+      {
+        invoices.length === 0 ? (
+          <div className="w-full flex flex-col items-center mt-20 gap-10">
+            <Image src={"/assets/no-invoice.png"} alt={"No invoice image"} width={240} height={200} />
+            <div className="w-[230px] space-y-5">
+              <h3 className="text-2xl text-center font-bold">There is nothing here</h3>
+              <p className="text-[13px] text-center w-[200px] mx-auto">Create an invoice by clicking the <strong>New Invoice</strong> button and get started</p>
+            </div>
+          </div>
+        ) : "there's shit"
+      }
+
+      {
+        openForm && <div onClick={()=> setOpenForm(false)} className="w-screen h-screen bg-black fixed top-0 left-0 opacity-50"></div>
+      }
+    </section>
+  )
+}
+
+export default Invoice
