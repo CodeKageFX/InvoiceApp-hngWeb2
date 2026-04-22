@@ -1,15 +1,25 @@
 import { Invoice } from "@/types/definitions"
 
+let cachedData: Invoice[] = []
+let lastRawData: string | null = null
 const key = "invoices"
 
 const invoiceStore = {
     getSnapShot: (): Invoice[] => {
-        const data = localStorage.getItem(key)
-        return data ? JSON.parse(data) : []
+        const rawData = localStorage.getItem(key)
+        if(rawData !== lastRawData) {
+            lastRawData = rawData
+            cachedData = rawData ? JSON.parse(rawData) : []
+        }
+        return cachedData
     },
     
     setValue: (invoices: Invoice[]) => {
-        localStorage.setItem(key, JSON.stringify(invoices))
+        const stringified = JSON.stringify(invoices)
+        localStorage.setItem(key, stringified)
+
+        lastRawData = stringified
+        cachedData = invoices
 
         window.dispatchEvent(new Event("storage"))
     },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { League_Spartan } from "next/font/google";
 import "./globals.css";
 import { InvoiceProvider } from "@/context/InvoiceContext";
+import ThemeProvider from "@/components/ThemeProvider";
 
 const leagueSpartan = League_Spartan({
   variable: "--font-league-spartan",
@@ -25,6 +26,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         <InvoiceProvider>
+          <ThemeProvider />
           {children}
         </InvoiceProvider>
         </body>

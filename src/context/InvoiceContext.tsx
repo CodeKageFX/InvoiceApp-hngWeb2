@@ -1,3 +1,5 @@
+"use client"
+
 import { Invoice } from "@/types/definitions";
 import { createContext, ReactNode, useState, useContext, useSyncExternalStore } from "react";
 import invoiceStore from "@/store/invoiceStore";
@@ -31,10 +33,11 @@ const InvoiceContext = createContext<InvoiceContextProps>(
 )
 
 export function InvoiceProvider({children}: {children: ReactNode}) {
+    const EMPTY: Invoice[] = []
     const invoices = useSyncExternalStore(
         invoiceStore.subscribe,
         invoiceStore.getSnapShot,
-        ()=> []
+        ()=> EMPTY
     )
     const [filter, setFilter] = useState<"all" | "draft" | "pending" | "paid">("all")
     const [theme, setTheme] = useState<"dark" | "light">(()=> {
