@@ -4,6 +4,7 @@ import { useInvoices } from "@/context/InvoiceContext"
 import { useRouter } from "next/navigation"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "./ui/button"
+import DeleteModal from "./DeleteModal"
 import { formatDateDisplay } from "@/lib/utils"
 import {
     Table,
@@ -13,8 +14,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { useState } from "react"
 
 const InvoiceDetails = ({id}: {id: string}) => {
+    const [open, setOpen] = useState<boolean>(false)
     const router = useRouter()
     const { invoices } = useInvoices()
     const invoice = invoices.find((invoice) => invoice.id === id)
@@ -29,6 +32,10 @@ const InvoiceDetails = ({id}: {id: string}) => {
         paid: "bg-[#33D69F]/10 text-[#33D69F]",
         pending: "bg-[#FF8F00]/10 text-[#FF8F00]",
         draft: "bg-[#DFE3FA]/10 text-[#DFE3FA]"
+    }
+
+    const onClose = () => {
+        setOpen(false)
     }
   return (
     <div className="space-y-6">
@@ -46,7 +53,7 @@ const InvoiceDetails = ({id}: {id: string}) => {
             </div>
             <div className="space-x-4">
                 <Button variant={"default"} className="bg-background rounded-full p-5">Edit</Button>
-                <Button variant={"default"} className="bg-delete rounded-full p-5">Delete</Button>
+                <Button variant={"default"} onClick={()=> setOpen(true)} className="bg-delete rounded-full p-5">Delete</Button>
                 {invoice.status !== "paid" && (
                     <Button variant={"default"} className="bg-primary rounded-full p-5">Mark as Paid</Button>
                 )}
@@ -119,6 +126,8 @@ const InvoiceDetails = ({id}: {id: string}) => {
                 </div>
             </div>
         </div>
+
+        <DeleteModal open={open} onClose={onClose} invoiceId={invoice.id} />
     </div>
   )
 }
