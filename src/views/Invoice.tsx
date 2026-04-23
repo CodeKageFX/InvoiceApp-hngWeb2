@@ -8,11 +8,16 @@ import Image from "next/image"
 import { useState } from "react"
 
 const Invoice = () => {
-  const { invoices } = useInvoices()
+  const { invoices, filter } = useInvoices()
   const [openForm, setOpenForm] = useState<boolean>(false)
+
+  const filteredInvoices = filter.length == 0
+    ? invoices
+    : invoices.filter(invoice => filter.includes(invoice.status))
+
   return (
     <section className="text-4xl w-[730px] mx-auto mt-10">
-      <InvoiceHeader setOpenForm={setOpenForm} />
+      <InvoiceHeader setOpenForm={setOpenForm} filteredInvoices={filteredInvoices} />
       {
         invoices.length === 0 ? (
           <div className="w-full flex flex-col items-center mt-20 gap-10">
@@ -24,7 +29,7 @@ const Invoice = () => {
           </div>
         ) : (
           <div className="space-y-4 mt-10">
-            {invoices.map((invoice) => (
+            {filteredInvoices.map((invoice) => (
               <InvoiceCard key={invoice.id} invoice={invoice} />
             ))}
           </div>
