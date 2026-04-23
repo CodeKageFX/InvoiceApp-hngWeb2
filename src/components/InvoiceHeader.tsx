@@ -3,7 +3,7 @@ import { useInvoices } from "@/context/InvoiceContext"
 import { Plus, ChevronDownIcon } from "lucide-react"
 import { Button } from "./ui/button"
 
-const InvoiceHeader = ({setOpenForm}: {setOpenForm: ()=> void }) => {
+const InvoiceHeader = ({setOpenForm}: {setOpenForm: (openForm: boolean) => void }) => {
     const { invoices } = useInvoices()
   return (
     <header className="flex justify-between items-center">

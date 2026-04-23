@@ -2,6 +2,7 @@
 
 import InvoiceHeader from "@/components/InvoiceHeader"
 import { useInvoices } from "@/context/InvoiceContext"
+import InvoiceForm from "@/components/InvoiceForm"
 import Image from "next/image"
 import { useState } from "react"
 
@@ -24,8 +25,10 @@ const Invoice = () => {
       }
 
       {
-        openForm && <div onClick={()=> setOpenForm(false)} className="w-screen h-screen bg-black fixed top-0 left-0 opacity-50"></div>
+        openForm && <div onClick={()=> setOpenForm(false)} className="w-screen h-screen bg-black fixed top-0 left-0 opacity-50 z-40"></div>
       }
+
+      <InvoiceForm openForm={openForm} setOpenForm={setOpenForm} />
     </section>
   )
 }
