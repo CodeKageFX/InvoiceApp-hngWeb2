@@ -146,8 +146,13 @@ const InvoiceForm = ({
     const { errors } = form.formState
 
     const onSubmit = (data: InvoiceFormData) => {
+        const itemsWithTotals = data.items.map((item) => ({
+            ...item,
+            total: Number(item.qty) * Number(item.price),
+        }))
         const newInvoice: Invoice = {
             ...data,
+            items: itemsWithTotals,
             id: generateId(),
             status: "pending",
             total: finalTotal,
@@ -170,8 +175,13 @@ const InvoiceForm = ({
             return
         }
 
+        const itemsWithTotals = data.items.map((item) => ({
+            ...item,
+            total: Number(item.qty) * Number(item.price),
+        }))
         const newInvoice: Invoice = {
             ...data,
+            items: itemsWithTotals,
             id: generateId(),
             status: "draft",
             total: finalTotal,
