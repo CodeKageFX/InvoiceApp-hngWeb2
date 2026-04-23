@@ -48,15 +48,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useMemo } from "react"
-
-function formatDateDisplay(dateStr: string): string {
-    if (!dateStr) return ""
-    return new Intl.DateTimeFormat("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-    }).format(new Date(`${dateStr}T00:00:00`))
-}
+import { formatDateDisplay } from "@/lib/utils"
 
 function FormField({
     control,
@@ -169,6 +161,15 @@ const InvoiceForm = ({
 
     const onDraft = () => {
         const data = form.getValues()
+
+        if (!data.items || data.items.length === 0) {
+            form.setError("items", {
+                type: "manual",
+                message: "At least one item is required",
+            })
+            return
+        }
+
         const newInvoice: Invoice = {
             ...data,
             id: generateId(),
@@ -316,6 +317,12 @@ const InvoiceForm = ({
                             {/* ── Item List ─────────────────────────────────── */}
                             <div>
                                 <h2 className="text-lg font-bold text-muted-foreground my-4">Item List</h2>
+                                {/* Root-level items array error (e.g. "At least one item is required") */}
+                                {errors.items && !Array.isArray(errors.items) && (
+                                    <p className="text-sm text-destructive mb-2">
+                                        {(errors.items as { message?: string }).message}
+                                    </p>
+                                )}
                                 <Table>
                                     <TableHeader className="border-none">
                                         <TableRow>

@@ -1,6 +1,7 @@
 "use client"
 
 import InvoiceHeader from "@/components/InvoiceHeader"
+import InvoiceCard from "@/components/InvoiceCard"
 import { useInvoices } from "@/context/InvoiceContext"
 import InvoiceForm from "@/components/InvoiceForm"
 import Image from "next/image"
@@ -18,10 +19,16 @@ const Invoice = () => {
             <Image src={"/assets/no-invoice.png"} alt={"No invoice image"} width={240} height={200} />
             <div className="w-[230px] space-y-5">
               <h3 className="text-2xl text-center font-bold">There is nothing here</h3>
-              <p className="text-[13px] text-center w-[200px] mx-auto">Create an invoice by clicking the <strong>New Invoice</strong> button and get started</p>
+              <p className="text-[13px] text-center w-[200px] mx-auto">Create an invoice by clicking the <button onClick={()=> setOpenForm(true)} className="font-bold cursor-pointer">New Invoice</button> button and get started</p>
             </div>
           </div>
-        ) : "there's shit"
+        ) : (
+          <div className="space-y-4 mt-10">
+            {invoices.map((invoice) => (
+              <InvoiceCard key={invoice.id} invoice={invoice} />
+            ))}
+          </div>
+        )
       }
 
       {
