@@ -16,7 +16,7 @@ const Invoice = () => {
     : invoices.filter(invoice => filter.includes(invoice.status))
 
   return (
-    <section className="text-4xl max-w-[730px] mx-auto mt-10">
+    <section className="text-4xl w-[730px] max-[842px]:w-[80%] mx-auto">
       <InvoiceHeader setOpenForm={setOpenForm} filteredInvoices={filteredInvoices} />
       {
         invoices.length === 0 ? (

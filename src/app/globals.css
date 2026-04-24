@@ -109,8 +109,10 @@
   }
 
   /* Firefox Support */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
   }
 }

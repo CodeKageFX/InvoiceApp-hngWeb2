@@ -20,19 +20,19 @@ const InvoiceCard = ({ invoice }: InvoiceCardProps) => {
     }
   return (
     <div tabIndex={1} onClick={()=> router.push(`/invoices/${invoice.id}`)} className="w-full flex justify-between bg-card rounded-2xl px-6 py-4">
-        <div className="flex items-center gap-8">
+        <div className="flex md:flex-row flex-col items-center md:gap-8 gap-2">
             <p className="text-[15px] font-bold">#{invoice.id}</p>
             <p className="text-[13px]">Due {formatDateDisplay(invoice.payment_due)}</p>
             <p className="text-[13px] font-medium">{invoice.client.name}</p>
         </div>
-        <div className="flex gap-6 items-center">
+        <div className="flex md:flex-row flex-col md:gap-6 gap-2 items-center">
             <p className="text-[15px] font-bold">£{invoice.total.toFixed(2)}</p> 
             <Button className={`${buttonStyle[invoice.status]} capitalize px-6 py-4 font-bold`}>
                 {/* <DotIcon className="size-10" /> */}
                 <span className="w-2 h-2 rounded-full bg-current"></span>
                 {invoice.status}
             </Button>
-            <Button variant={"ghost"}>
+            <Button variant={"ghost"} className="md:block hidden">
                 <ChevronRight />
             </Button>
         </div>

@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans">
         <InvoiceProvider>
           <ThemeProvider />
-          <main className="flex">
+          <main className="flex flex-col md:flex-row">
             <SideBar />
             {children}
           </main>

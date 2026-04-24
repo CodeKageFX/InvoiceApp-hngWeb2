@@ -10,7 +10,7 @@ const SideBar = () => {
     const { theme, toggleTheme } = useInvoices()
 
   return (
-    <aside className="h-[90px] z-100 md:h-screen fixed top-0 w-screen md:w-[90px] bg-sidebar flex flex-row md:flex-col justify-between items-center md:rounded-r-2xl">
+    <aside className="h-[90px] z-100 md:h-screen sticky top-0 left-0 w-full md:w-[90px] bg-sidebar flex flex-row md:flex-col justify-between items-center md:rounded-r-2xl">
         <div className="flex flex-row md:flex-col items-center justify-between h-full w-full pr-6 md:pb-6 md:pr-0">
             <Image src={"/assets/sidebar-image.png"} alt="Logo" width={90} height={90} loading="eager" />
             <Button variant={"ghost"} onClick={toggleTheme}>

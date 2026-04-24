@@ -46,14 +46,14 @@ const InvoiceDetails = ({id}: {id: string}) => {
             Go back
         </Button>
         <div className="bg-sidebar flex justify-between rounded-[8px] p-5">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 md:w-fit justify-between w-full">
                 <h3 className="text-[13px] font-medium">Status</h3>
-                <Button className={`${buttonStyle[invoice.status]} capitalize px-6 py-4 font-bold`}>
+                <Button className={`${buttonStyle[invoice.status]} capitalize px-6 py-4 font-bold md`}>
                     <span className="w-2 h-2 rounded-full bg-current"></span>
                     {invoice.status}
                 </Button>
             </div>
-            <div className="space-x-4">
+            <div className="space-x-4 md:block hidden">
                 {
                     invoice.status !== "paid" && (
                         <Button variant={"default"} onClick={()=> setOpenEdit(true)} className="bg-background rounded-full p-5">Edit</Button>
@@ -66,20 +66,20 @@ const InvoiceDetails = ({id}: {id: string}) => {
             </div>
         </div>
         <div className="bg-sidebar rounded-[8px] p-10 space-y-9">
-            <div className="flex justify-between w-full">
+            <div className="flex md:flex-row flex-col gap-4 md:gap-0 justify-between w-full">
                 <div className="space-y-2">
                     <h3 className="font-bold text-[15px]">#{invoice.id}</h3>
                     <p className="text-[13px] font-medium text-muted-foreground">{invoice.description}</p>
                 </div>
 
-                <div className="flex flex-col items-end gap-2 text-muted-foreground">
+                <div className="flex flex-col md:items-end gap-2 text-muted-foreground">
                     <p className="text-[13px] font-medium ">{invoice.sender.address}</p>
                     <p className="text-[13px] font-medium ">{invoice.sender.city}</p>
                     <p className="text-[13px] font-medium ">{invoice.sender.postcode}</p>
                     <p className="text-[13px] font-medium ">{invoice.sender.country}</p>
                 </div>
             </div>
-            <div className="flex justify-between w-[80%]">
+            <div className="flex flex-wrap gap-4 justify-between w-[80%]">
                 <div className="space-y-8">
                     <div className="space-y-3">
                         <h3 className="text-[13px] font-medium text-muted-foreground">Invoice Date</h3> 
@@ -142,6 +142,18 @@ const InvoiceDetails = ({id}: {id: string}) => {
         {
             openEdit && <div onClick={()=> setOpenEdit(false)} className="w-screen h-screen bg-black fixed top-0 left-0 opacity-50 z-40"></div>
         }
+
+        <div className="space-x-4 md:hidden bg-card w-full py-3 rounded-[8px] flex justify-center">
+                {
+                    invoice.status !== "paid" && (
+                        <Button variant={"default"} onClick={()=> setOpenEdit(true)} className="bg-background rounded-full p-5">Edit</Button>
+                    )
+                }
+                <Button variant={"default"} onClick={()=> setOpen(true)} className="bg-delete rounded-full p-5">Delete</Button>
+                {invoice.status !== "paid" && (
+                    <Button variant={"default"} onClick={()=> markAsPaid(invoice.id)} className="bg-primary rounded-full p-5">Mark as Paid</Button>
+                )}
+            </div>
     </div>
   )
 }

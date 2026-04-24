@@ -27,7 +27,7 @@ const InvoiceHeader = ({setOpenForm, filteredInvoices}: {setOpenForm: (openForm:
     }
 
     return (
-        <header className="flex justify-between items-center mt-20 md:mt-0">
+        <header className="flex justify-between items-center mt-20">
             <div>
                 <h1 className="font-bold text-4xl">Invoices</h1>
                 <p className="text-[13px]">{ filteredInvoices.length ? `There are ${filteredInvoices.length} invoices` : "No invoices" }</p>
