@@ -21,14 +21,16 @@ const invoiceStore = {
         lastRawData = stringified
         cachedData = invoices
 
-        window.dispatchEvent(new Event("storage"))
+        // Use a custom event — the native "storage" event only fires
+        // in OTHER tabs, so same-tab writes would never notify subscribers.
+        window.dispatchEvent(new Event("invoice-store-update"))
     },
 
-    subscribe: (listener: ()=> void)=> {
-        window.addEventListener("storage", listener)
+    subscribe: (listener: () => void) => {
+        window.addEventListener("invoice-store-update", listener)
 
-        return ()=> {
-            window.removeEventListener("storage", listener)
+        return () => {
+            window.removeEventListener("invoice-store-update", listener)
         }
     }
 }

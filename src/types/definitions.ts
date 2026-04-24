@@ -22,8 +22,7 @@ export interface Invoice {
     client: {
         name: string
         email: string
-        address: Address
-    }
+    } & Address
     invoice_date: string
     payment_due: string
     payment_terms: string

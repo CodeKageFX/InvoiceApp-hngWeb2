@@ -7,6 +7,8 @@
 @theme inline {
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-paid: var(--paid);
   --color-pending: var(--pending);
   --color-draft: var(--draft);
@@ -17,9 +19,12 @@
   --color-card: var(--card);
   --color-sidebar: var(--sidebar);
   --color-border: var(--border);
+
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-accent: var(--accent);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
 
   --font-sans: var(--font-league-spartan);
   
@@ -39,9 +44,13 @@
   --input: #DFE3FA;
   --ring: #7C5DFA;
   --accent: #F1F1F1;
+  --popover: #FFFFFF;
+  --popover-foreground: #0C0E16;
   
   --primary: #7C5DFA;
   --primary-light: #9277FF;
+  --muted: #7E88C3;
+  --muted-foreground: #7E88C3;
   --paid: #33D69F;
   --pending: #FF8F00;
   --draft: #373B53;
@@ -58,10 +67,14 @@
   --border: #252945;
   --input: #252945;
   --ring: #7C5DFA;
-  --accent: #292C44;
+  --accent: #DFE3FA;
+  --popover: #252945;
+  --popover-foreground: #FFFFFF;
   
   --primary: #7C5DFA;
   --primary-light: #9277FF;
+  --muted: #7E88C3;
+  --muted-foreground: #DFE3FA;
   --paid: #33D69F;
   --pending: #FF8F00;
   --draft: #DFE3FA;
@@ -74,5 +87,30 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
+
+  /* Firefox Support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
   }
 }
