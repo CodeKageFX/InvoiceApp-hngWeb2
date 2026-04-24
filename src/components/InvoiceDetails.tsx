@@ -15,11 +15,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
+import InvoiceForm from "./InvoiceForm"
 
 const InvoiceDetails = ({id}: {id: string}) => {
     const [open, setOpen] = useState<boolean>(false)
+    const [openEdit, setOpenEdit] = useState(false)
     const router = useRouter()
-    const { invoices } = useInvoices()
+    const { invoices, markAsPaid } = useInvoices()
     const invoice = invoices.find((invoice) => invoice.id === id)
 
     if(!invoice) {
@@ -52,10 +54,14 @@ const InvoiceDetails = ({id}: {id: string}) => {
                 </Button>
             </div>
             <div className="space-x-4">
-                <Button variant={"default"} className="bg-background rounded-full p-5">Edit</Button>
+                {
+                    invoice.status !== "paid" && (
+                        <Button variant={"default"} onClick={()=> setOpenEdit(true)} className="bg-background rounded-full p-5">Edit</Button>
+                    )
+                }
                 <Button variant={"default"} onClick={()=> setOpen(true)} className="bg-delete rounded-full p-5">Delete</Button>
                 {invoice.status !== "paid" && (
-                    <Button variant={"default"} className="bg-primary rounded-full p-5">Mark as Paid</Button>
+                    <Button variant={"default"} onClick={()=> markAsPaid(invoice.id)} className="bg-primary rounded-full p-5">Mark as Paid</Button>
                 )}
             </div>
         </div>
@@ -110,8 +116,8 @@ const InvoiceDetails = ({id}: {id: string}) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {invoice.items.map((item) => (
-                            <TableRow key={item.name}>
+                        {invoice.items.map((item, index) => (
+                            <TableRow key={index}>
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.qty}</TableCell>
                                 <TableCell>£{item.price}</TableCell>
@@ -128,6 +134,14 @@ const InvoiceDetails = ({id}: {id: string}) => {
         </div>
 
         <DeleteModal open={open} onClose={onClose} invoiceId={invoice.id} />
+        <InvoiceForm
+            openForm={openEdit} 
+            setOpenForm={setOpenEdit}
+            invoiceToEdit={invoice}
+        />
+        {
+            openEdit && <div onClick={()=> setOpenEdit(false)} className="w-screen h-screen bg-black fixed top-0 left-0 opacity-50 z-40"></div>
+        }
     </div>
   )
 }

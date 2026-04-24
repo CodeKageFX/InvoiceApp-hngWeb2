@@ -27,7 +27,7 @@ const InvoiceHeader = ({setOpenForm, filteredInvoices}: {setOpenForm: (openForm:
     }
 
     return (
-        <header className="flex justify-between items-center">
+        <header className="flex justify-between items-center mt-20 md:mt-0">
             <div>
                 <h1 className="font-bold text-4xl">Invoices</h1>
                 <p className="text-[13px]">{ filteredInvoices.length ? `There are ${filteredInvoices.length} invoices` : "No invoices" }</p>
@@ -37,7 +37,7 @@ const InvoiceHeader = ({setOpenForm, filteredInvoices}: {setOpenForm: (openForm:
                 <DropdownMenu open={open} onOpenChange={setOpen}>
                     <DropdownMenuTrigger asChild>
                         <Button variant={"ghost"} className="hover:bg-transparent font-bold">
-                            Filter by status
+                            Filter <span className="hidden sm:block">by status</span>
                             {open ? <ChevronUpIcon className="ml-2 text-primary" /> : <ChevronDownIcon className="ml-2 text-primary" />}
                         </Button>
                     </DropdownMenuTrigger>
@@ -63,7 +63,7 @@ const InvoiceHeader = ({setOpenForm, filteredInvoices}: {setOpenForm: (openForm:
                     <div className="bg-white p-2 rounded-full mr-2">
                         <Plus className="text-primary w-4 h-4" />
                     </div>
-                    New Invoice
+                    New <span className="hidden sm:block">Invoice</span>
                 </Button>
             </div>
         </header>

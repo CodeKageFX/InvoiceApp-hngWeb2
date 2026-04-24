@@ -20,14 +20,14 @@ export const invoiceSchema = z.object({
     payment_terms: z.string().min(1, "Payment terms is required"),
     description: z.string().min(1, "Project description is required"),
     items: z.array(
-        z.object({
-            name: z.string().min(1, "Item name is required"),
-            qty: z.number().min(1, "Quantity must be at least 1"),
-            price: z.number().min(0, "Price must be positive"),
-            total: z.number(),
-        })
-    ).min(1, "At least one item is required"),
-    total: z.number(),
+    z.object({
+        name: z.string().min(1, "Item name is required"),
+        qty: z.coerce.number().min(1, "Quantity must be at least 1"),
+        price: z.coerce.number().min(0, "Price must be positive"),
+        total: z.number().default(0),
+    })
+).min(1, "At least one item is required"),
+total: z.number().default(0),
 })
 
 export type InvoiceFormData = z.infer<typeof invoiceSchema>

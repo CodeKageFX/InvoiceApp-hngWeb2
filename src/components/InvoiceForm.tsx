@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
@@ -47,7 +48,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useMemo } from "react"
+import { useMemo, useEffect } from "react"
 import { formatDateDisplay } from "@/lib/utils"
 
 function FormField({
@@ -57,7 +58,7 @@ function FormField({
     id,
     className,
 }: {
-    control: Control<InvoiceFormData>
+    control: Control<InvoiceFormData, any>
     name: Path<InvoiceFormData>
     label: string
     id?: string
@@ -65,7 +66,6 @@ function FormField({
 }) {
     const { errors } = useFormState({ control, name })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fieldError: RHFFieldError | undefined = name.split(".").reduce((acc: any, key) => acc?.[key], errors)
 
     const inputId = id ?? name
@@ -98,15 +98,18 @@ function FormField({
 const InvoiceForm = ({
     openForm,
     setOpenForm,
+    invoiceToEdit
 }: {
     openForm: boolean
     setOpenForm: (openForm: boolean) => void
+    invoiceToEdit?: Invoice
 }) => {
-    const { addInvoice } = useInvoices()
+    const { addInvoice, updateInvoice } = useInvoices()
+    const isEditing = !!invoiceToEdit
 
-    const form = useForm<InvoiceFormData>({
-        resolver: zodResolver(invoiceSchema),
-        defaultValues: {
+    const form = useForm<InvoiceFormData, any, InvoiceFormData>({
+        resolver: zodResolver(invoiceSchema) as any,
+        defaultValues: invoiceToEdit ?? {
             sender: { address: "", city: "", postcode: "", country: "" },
             client: { name: "", email: "", address: "", city: "", postcode: "", country: "" },
             invoice_date: "",
@@ -117,6 +120,24 @@ const InvoiceForm = ({
             total: 0,
         },
     })
+
+    useEffect(() => {
+        if (invoiceToEdit) {
+            form.reset(invoiceToEdit)
+        } else {
+            form.reset({
+                sender: { address: "", city: "", postcode: "", country: "" },
+                client: { name: "", email: "", address: "", city: "", postcode: "", country: "" },
+                invoice_date: "",
+                payment_due: "",
+                payment_terms: "",
+                description: "",
+                items: [],
+                total: 0,
+            })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [invoiceToEdit])
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
@@ -146,20 +167,33 @@ const InvoiceForm = ({
     const { errors } = form.formState
 
     const onSubmit = (data: InvoiceFormData) => {
+        console.log("Submit data:", data)
         const itemsWithTotals = data.items.map((item) => ({
             ...item,
             total: Number(item.qty) * Number(item.price),
         }))
-        const newInvoice: Invoice = {
-            ...data,
-            items: itemsWithTotals,
-            id: generateId(),
-            status: "pending",
-            total: finalTotal,
-            payment_due: paymentDue,
-            created_at: new Date().toISOString(),
+
+        const resolvedPaymentDue = paymentDue || (isEditing ? invoiceToEdit.payment_due : "")
+
+        if (isEditing) {
+            updateInvoice(invoiceToEdit.id, {
+                ...data,
+                items: itemsWithTotals,
+                total: finalTotal,
+                payment_due: resolvedPaymentDue,
+            })
+        } else {
+            const newInvoice: Invoice = {
+                ...data,
+                items: itemsWithTotals,
+                id: generateId(),
+                status: "pending",
+                total: finalTotal,
+                payment_due: resolvedPaymentDue,
+                created_at: new Date().toISOString(),
+            }
+            addInvoice(newInvoice)
         }
-        addInvoice(newInvoice)
         setOpenForm(false)
         form.reset()
     }
@@ -203,8 +237,8 @@ const InvoiceForm = ({
                     transition={{ type: "tween", duration: 0.3 }}
                     className="fixed top-0 left-0 h-screen w-full md:w-[719px] bg-background z-50 overflow-y-auto pt-[140px] px-6 pb-10 md:pt-14 md:pl-[140px] md:pr-14"
                 >
-                    <form onSubmit={form.handleSubmit(onSubmit)} id="invoice-form">
-                        <h2 className="text-2xl font-bold mb-15">New Invoice</h2>
+                    <form onSubmit={form.handleSubmit(onSubmit, (errs) => console.error("Form validation errors:", errs))} id="invoice-form">
+                        <h2 className="text-2xl font-bold mb-15">{isEditing ? `Edit #${invoiceToEdit.id}` : "New Invoice"}</h2>
                         <FieldGroup>
 
                             {/* ── Bill From ─────────────────────────────────── */}
@@ -372,33 +406,55 @@ const InvoiceForm = ({
                     </form>
 
                     <div className="flex items-center justify-between w-full mt-6">
-                        <Button
-                            variant="default"
-                            className="rounded-full px-8 py-6 text-primary bg-white"
-                            type="reset"
-                            onClick={() => {
-                                form.reset()
-                                setOpenForm(false)
-                            }}
-                        >
-                            Discard
-                        </Button>
+                        {
+                            !isEditing && (
+                                <Button
+                                    variant="default"
+                                    className="rounded-full px-8 py-6 text-primary bg-white"
+                                    type="reset"
+                                    onClick={() => {
+                                        form.reset()
+                                        setOpenForm(false)
+                                    }}
+                                >
+                                    Discard
+                                </Button>
+                            )
+                        }
 
                         <div className="space-x-3">
-                            <Button
-                                onClick={onDraft}
-                                type="button"
-                                variant="default"
-                                className="rounded-full px-8 py-6 bg-[#373B53]"
-                            >
-                                Save as Draft
-                            </Button>
+                            {!isEditing && (
+                                <Button
+                                    onClick={onDraft}
+                                    type="button"
+                                    variant="default"
+                                    className="rounded-full px-8 py-6 bg-[#373B53]"
+                                >
+                                    Save as Draft
+                                </Button>
+                            )}
+                            {
+                                isEditing && (
+                                    <Button
+                                        variant="default"
+                                        className="rounded-full px-8 py-6 text-white bg-card"
+                                        type="reset"
+                                        onClick={() => {
+                                            form.reset()
+                                            setOpenForm(false)
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                )
+                            }
+
                             <Button
                                 type="submit"
                                 form="invoice-form"
                                 className="rounded-full px-8 py-6"
                             >
-                                Save &amp; Send
+                                {isEditing ? "Save Changes" : "Save & Send"}
                             </Button>
                         </div>
                     </div>
