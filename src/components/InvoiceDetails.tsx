@@ -45,7 +45,7 @@ const InvoiceDetails = ({id}: {id: string}) => {
             <ChevronLeft className="text-primary" />
             Go back
         </Button>
-        <div className="bg-sidebar flex justify-between rounded-[8px] p-5">
+        <div className="bg-card flex justify-between rounded-[8px] p-5">
             <div className="flex items-center gap-4 md:w-fit justify-between w-full">
                 <h3 className="text-[13px] font-medium">Status</h3>
                 <Button className={`${buttonStyle[invoice.status]} capitalize px-6 py-4 font-bold md`}>
@@ -65,7 +65,7 @@ const InvoiceDetails = ({id}: {id: string}) => {
                 )}
             </div>
         </div>
-        <div className="bg-sidebar rounded-[8px] p-10 space-y-9">
+        <div className="bg-card rounded-[8px] p-10 space-y-9">
             <div className="flex md:flex-row flex-col gap-4 md:gap-0 justify-between w-full">
                 <div className="space-y-2">
                     <h3 className="font-bold text-[15px]">#{invoice.id}</h3>
@@ -106,7 +106,7 @@ const InvoiceDetails = ({id}: {id: string}) => {
                 </div>
             </div>
             <div>
-                <Table className="bg-card rounded-t-[8px]">
+                <Table className="dark:bg-sidebar rounded-t-[8px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Item Name</TableHead>
@@ -126,7 +126,7 @@ const InvoiceDetails = ({id}: {id: string}) => {
                         ))}
                     </TableBody>
                 </Table>
-                <div className="flex justify-between bg-black rounded-b-[8px] p-5">
+                <div className="flex justify-between dark:bg-black bg-[whitesmoke] rounded-b-[8px] p-5">
                     <p className="text-[13px] font-medium text-muted-foreground">Amount Due</p>
                     <p className="text-[24px] font-bold">£{invoice.total}</p>
                 </div>
